@@ -28,6 +28,10 @@ class PlayerConnection(channel: Channel[String]) extends Actor {
       lobby ! ConnectedPlayer(Player(name), self)
     }
 
+    case PlayerMessage("selectTag", tagId) => {
+      currentGame.map{ game => game ! SelectTag(tagId)}
+    }
+
     case JoinedGame(state, gameRef) => {
       currentGame = Some(gameRef)
       channel push state.toJson
