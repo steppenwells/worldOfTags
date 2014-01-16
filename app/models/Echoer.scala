@@ -21,10 +21,12 @@ class EchoChamber(channel: Channel[String]) extends Actor {
   def receive = {
 
     case Echo(text) => {
-      channel.push(text)
+      val tags = ContentApi.getFollowupTags(List(text))
+      tags.onSuccess{
+        case ts => channel.push(ts.map(_.toJson).mkString("""{ "tags" : [""", ",", "]}"))
+      }
     }
   }
-
 
 }
 

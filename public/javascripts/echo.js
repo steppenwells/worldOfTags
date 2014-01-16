@@ -7,7 +7,9 @@ function EchoCtrl($scope) {
 
     ws.onmessage = function(message) {
       console.log("got:", message);
-      $scope.$apply($scope.messages.push(message.data));
+      console.log(message.data);
+      var data = JSON.parse(message.data);
+      $scope.$apply($scope.messages = data.tags);
     };
 
   $scope.echo = function() {
