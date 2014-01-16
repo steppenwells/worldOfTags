@@ -2,6 +2,7 @@
 GET   /          controllers.AppMain.welcome
 GET   /echo          controllers.AppMain.echo
 GET   /echoSocket          controllers.AppMain.echoSocket
+GET   /gameConnection          controllers.AppMain.gameConnection
 
 POST  /game      controllers.AppMain.game()
 
