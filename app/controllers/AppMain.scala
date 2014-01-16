@@ -7,4 +7,6 @@ object AppMain extends Controller {
   def welcome() = Action {
     Ok(views.html.Application.welcome("simple message..."))
   }
+
+  def echo() = Action { Ok(views.html.Application.echo()) }
 }
