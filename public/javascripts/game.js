@@ -1,20 +1,23 @@
 function GameCtrl($scope) {
   $scope.name = nameGlobal;
 
-  $scope.toSend = "foo";
+  $scope.state;
 
-  var ws = new WebSocket("ws://localhost:9000/gameConnection");
+  $scope.ws = new WebSocket("ws://localhost:9000/gameConnection");
 
-  ws.onmessage = function(message) {
-      console.log("got:", message);
+  $scope.ws.onopen = function() {
+      $scope.ws.send('connect:' + $scope.name);
+  };
+
+  $scope.ws.onmessage = function(message) {
       console.log(message.data);
-//      var data = JSON.parse(message.data);
-//      $scope.$apply($scope.messages = data.tags);
+      var newData = JSON.parse(message.data);
+      $scope.$apply($scope.data = newData);
     };
 
   $scope.echo = function() {
       console.log("would send", $scope.toSend);
-      ws.send($scope.toSend);
+      $scope.ws.send($scope.toSend);
   };
 
 }

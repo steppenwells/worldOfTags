@@ -116,7 +116,7 @@ case class GameState(
   pickedTags: List[Tag],
   availableTags: List[Tag]
 ) {
-  def toJson = s"""{"playerOne" : ${playerOne.toJson}, "playerTwo" : ${playerTwo.toJson}, "active" : "$active", "pickedTags" : [${pickedTags.map(_.toJson).mkString(",")}], , "availableTags" : [${availableTags.map(_.toJson).mkString(",")}]  }"""
+  def toJson = s"""{"playerOne" : ${playerOne.toJson}, "playerTwo" : ${playerTwo.toJson}, "active" : "$active", "pickedTags" : [${pickedTags.map(_.toJson).mkString(",")}], "availableTags" : [${availableTags.map(_.toJson).mkString(",")}]  }"""
 }
 
 
