@@ -2,6 +2,13 @@
 
 @main(title = "WOT - welcome") {
 
-    <h1>@message</h1>
+    <h3>Welcome</h3>
+    <div class="container">
+        <form action="/game" method="POST">
+            please enter your name:
+            <input type="text" name="name">
+            <input type="submit" value="Play"/>
+        </form>
+    </div>
 
 }
