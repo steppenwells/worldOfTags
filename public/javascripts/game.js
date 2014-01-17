@@ -5,7 +5,9 @@ function GameCtrl($scope) {
 
   $scope.waiting = false;
 
-  $scope.ws = new WebSocket("ws://localhost:9000/gameConnection");
+    console.log(window.location.origin);
+
+  $scope.ws = new WebSocket(window.location.origin.replace("http://", "ws://")+'/gameConnection');
 
   $scope.ws.onopen = function() {
       $scope.ws.send('connect:' + $scope.name);
