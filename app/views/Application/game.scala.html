@@ -30,7 +30,7 @@
                 <h3>Tricks</h3>
                 <div class="well" ng-repeat="trick in state.playerOne.tricks">
                      <h4>{{trick.score}}</h4>
-                     <ul>
+                     <ul class="unstyled">
                          <li ng-repeat="tag in trick.tags">
                             {{tag.name}}
                          </li>
@@ -56,11 +56,9 @@
                 </div>
                 <div class="row" ng-hide="isActive()">
                     <h3>Opponent's move:</h3>
-                    <ul class="inline">
-                        <li ng-repeat="tag in state.availableTags">
-                            <a href="#" class="btn">{{tag.name}}</a>
-                        </li>
-                    </ul>
+                    <span ng-repeat="tag in state.availableTags">
+                        <a href="#" class="btn">{{tag.name}}</a>
+                    </span>
                 </div>
             </div>
 
@@ -68,7 +66,7 @@
                 <h3>Tricks</h3>
                 <div class="well" ng-repeat="trick in state.playerTwo.tricks">
                      <h4>{{trick.score}}</h4>
-                     <ul>
+                     <ul class="unstyled">
                          <li ng-repeat="tag in trick.tags">
                             {{tag.name}}
                          </li>
