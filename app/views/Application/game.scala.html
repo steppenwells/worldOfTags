@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            <div class="span6">
+            <div class="span6" ng-hide="winnerMessage()">
                 <div class="row">
                     <h3>Picked so far:</h3>
                     <ol class="breadcrumb">
@@ -60,6 +60,11 @@
                         <a href="#" class="btn">{{tag.name}}</a>
                     </span>
                 </div>
+            </div>
+
+            <div class="span6" ng-show="winnerMessage()">
+                <h1>{{winnerMessage()}}</h1>
+                <img src="@routes.Assets.at("images/wot.png")" />
             </div>
 
             <div class="span3">
