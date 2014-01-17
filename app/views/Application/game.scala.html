@@ -5,8 +5,76 @@
         var nameGlobal = "@name";
     </script>
     <div class="container" ng-controller="GameCtrl">
+
         <div class="row" ng-hide="state"><h3>connecting...</h3></div>
-        <div class="row" ng-show="state"><h3>connected {{state.playerOne.name}} vs {{state.playerTwo.name}}</h3></div>
-    <h2>hello {{name}}</h2>
+
+        <div class="row" ng-show="state">
+          <div class="span6">
+              <h2 class="text-left">{{state.playerOne.name}}</h2>
+              <div class="progress progress-info">
+                <div class="bar" ng-style="'width: ' + state.playerOne.score+'%'"></div>
+              </div>
+
+          </div>
+          <div class="span6">
+              <h2 class="text-right">{{state.playerTwo.name}}</h2>
+              <div class="progress progress-info">
+                <div class="bar" ng-style="'width: ' + state.playerOne.score+'%'"></div>
+              </div>
+          </div>
+        </div>
+
+        <div class="row" ng-show="state">
+
+            <div class="span3">
+                <h3>Tricks</h3>
+                <div class="well" ng-repeat="trick in state.playerOne.tricks">
+                     <h4>{{trick.score}}</h4>
+                     <ul>
+                         <li ng-repeat="tag in trick.tags">
+                            {{tag.name}}
+                         </li>
+                     </ul>
+                </div>
+            </div>
+
+            <div class="span6">
+                <div class="row">
+                    <h3>Picked so far:</h3>
+                    <ol class="breadcrumb">
+                        <li class="active" ng-repeat="tag in state.pickedTags">{{tag.name}}</li>
+                    </ol>
+                </div>
+                <div class="row" ng-show="isActive()">
+                    <h3 >Make your choice:</h3>
+                    <ul>
+                        <li ng-repeat="tag in state.availableTags">
+                            <a href="#" class="btn btn-primary" ng-click="chooseTag(tag.id)">{{tag.name}}</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="row" ng-hide="isActive()">
+                    <h3>Opponent's move:</h3>
+                    <ul>
+                        <li ng-repeat="tag in state.availableTags">
+                            <a href="#" class="btn">{{tag.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="span3">
+                <h3>Tricks</h3>
+                <div class="well" ng-repeat="trick in state.playerTwo.tricks">
+                     <h4>{{trick.score}}</h4>
+                     <ul>
+                         <li ng-repeat="tag in trick.tags">
+                            {{tag.name}}
+                         </li>
+                     </ul>
+                </div>
+            </div>
+        </div>
     </div>
 }
