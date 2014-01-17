@@ -29,6 +29,7 @@ class PlayerConnection(channel: Channel[String]) extends Actor {
     }
 
     case PlayerMessage("selectTag", tagId) => {
+      println(s"selected tag $tagId")
       currentGame.map{ game => game ! SelectTag(tagId)}
     }
 
@@ -38,6 +39,7 @@ class PlayerConnection(channel: Channel[String]) extends Actor {
     }
 
     case SyncState(state) => {
+      println("syncing state")
       channel push state.toJson
     }
   }

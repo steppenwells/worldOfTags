@@ -20,7 +20,7 @@ class GameActor(one: ConnectedPlayer, two: ConnectedPlayer) extends Actor {
       playerTwo = two.player,
       active = one.player.name,
       pickedTags = List(startTag),
-      availableTags = availableTags.tags)
+      availableTags = availableTags.tags.filterNot(_ == startTag))
 
     one.connection ! JoinedGame(state, self)
     two.connection ! JoinedGame(state, self)
@@ -28,6 +28,7 @@ class GameActor(one: ConnectedPlayer, two: ConnectedPlayer) extends Actor {
 
   def receive = {
     case SelectTag(tagId: String) => {
+      println("processing move")
       val followUps = for(
         newTag <- ContentApi.getTag(tagId);
         followupTags <- ContentApi.getFollowupTags( state.pickedTags.map(_.id) ::: tagId :: Nil )
@@ -36,9 +37,15 @@ class GameActor(one: ConnectedPlayer, two: ConnectedPlayer) extends Actor {
         Move(newTag, followupTags.count, followupTags.tags.filterNot(tagSet.contains(_)) )
       }
 
+      followUps onFailure{ case s => s.printStackTrace()}
+
       followUps onSuccess{ case fut =>
+        println("loaded followups")
         fut match {
           case Move(t, c, Nil) => {
+
+            println("no moves available - resetting")
+
             val trickTags = state.pickedTags ::: t :: Nil
             val trick = Trick(trickTags.length, trickTags)
 
@@ -74,7 +81,53 @@ class GameActor(one: ConnectedPlayer, two: ConnectedPlayer) extends Actor {
                 playerTwo = p2,
                 active = inactivePlayer,
                 pickedTags = List(startTag),
-                availableTags = availableTags.tags)
+                availableTags = availableTags.tags.filterNot(_ == startTag))
+
+              one.connection ! SyncState(state)
+              two.connection ! SyncState(state)
+            }
+          }
+
+          case Move(t, 1, _) => {
+
+            println("one contnet item left - resetting")
+
+            val trickTags = state.pickedTags ::: t :: Nil
+            val trick = Trick(trickTags.length, trickTags)
+
+            val p1 = if(state.playerOne.name == state.active) {
+              state.playerOne.copy(
+                score = state.playerOne.score + trick.score,
+                tricks = trick :: state.playerOne.tricks
+              )
+            } else {
+              state.playerOne
+            }
+
+            val p2 = if(state.playerTwo.name == state.active) {
+              state.playerTwo.copy(
+                score = state.playerTwo.score + trick.score,
+                tricks = trick :: state.playerTwo.tricks
+              )
+            } else {
+              state.playerTwo
+            }
+
+            val inactivePlayer = if(state.playerOne.name == state.active) state.playerTwo.name else state.playerOne.name
+
+            for (
+                startTag <- ContentApi.getRandomTag;
+                availableTags <- ContentApi.getFollowupTags(List(startTag.id))
+              ) {
+
+              println(s"hand done -- game start tag is: ${startTag.id}")
+
+              state = GameState(
+                playerOne = p1,
+                playerTwo = p2,
+                active = inactivePlayer,
+                pickedTags = List(startTag),
+                availableTags = availableTags.tags.filterNot(_ == startTag))
 
               one.connection ! SyncState(state)
               two.connection ! SyncState(state)
@@ -83,7 +136,7 @@ class GameActor(one: ConnectedPlayer, two: ConnectedPlayer) extends Actor {
 
 
           case Move(t, c, ats) => {
-
+            println("moves available - following up move")
             val inactivePlayer = if(state.playerOne.name == state.active) state.playerTwo.name else state.playerOne.name
 
             println(s"hand continues -- available tags: ${ats}")
@@ -129,5 +182,5 @@ case class Player(
 }
 
 case class Trick(score: Int, tags: List[Tag]) {
-  def toJson = s"""{"score: $score, "tags" : [${tags.map(_.toJson).mkString(",")}]}"""
+  def toJson = s"""{"score": $score, "tags" : [${tags.map(_.toJson).mkString(",")}]}"""
 }

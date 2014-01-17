@@ -42,21 +42,21 @@
                 <div class="row">
                     <h3>Picked so far:</h3>
                     <ol class="breadcrumb">
-                        <li class="active" ng-repeat="tag in state.pickedTags">{{tag.name}}</li>
+                        <li class="active" ng-repeat="tag in state.pickedTags"> <span class="divider"> / </span>{{tag.name}}</li>
                     </ol>
                 </div>
                 <div class="row" ng-show="isActive()">
                     <h3 >Make your choice:</h3>
-                    <ul>
-                        <li ng-repeat="tag in state.availableTags">
-                            <a href="#" class="btn btn-primary" ng-click="chooseTag(tag.id)">{{tag.name}}</a>
-                        </li>
-                    </ul>
+
+                    <span ng-repeat="tag in state.availableTags">
+                        <a href="#" class="btn btn-primary" ng-click="chooseTag(tag.id)">{{tag.name}}</a>
+                    </span>
+
 
                 </div>
                 <div class="row" ng-hide="isActive()">
                     <h3>Opponent's move:</h3>
-                    <ul>
+                    <ul class="inline">
                         <li ng-repeat="tag in state.availableTags">
                             <a href="#" class="btn">{{tag.name}}</a>
                         </li>
