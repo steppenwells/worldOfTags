@@ -41,19 +41,19 @@ function GameCtrl($scope) {
   }
 
   $scope.playerOneProgress = function() {
-      var perScore = $scope.state.playerOne.score * 4;
+      var perScore = $scope.state.playerOne.score * 10;
       if (perScore > 100) {
           perscore = 100;
       }
-      return 'width: ' + perScore + '%'
+      return {width: perScore + '%'};
   };
 
     $scope.playerTwoProgress = function() {
-      var perScore = $scope.state.playerTwo.score * 4;
+      var perScore = $scope.state.playerTwo.score * 10;
       if (perScore > 100) {
           perscore = 100;
       }
-      return 'width: ' + perScore + '%'
+      return {width: perScore + '%'};
   };
 
   $scope.winnerMessage = function() {
