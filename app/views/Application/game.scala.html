@@ -6,20 +6,20 @@
     </script>
     <div class="container" ng-controller="GameCtrl">
 
-        <div class="row" ng-hide="state"><h3>connecting...</h3></div>
+        <div class="row" ng-hide="state"><h3>connecting...<img src="@routes.Assets.at("images/spinner.gif")" /></h3></div>
 
         <div class="row" ng-show="state">
           <div class="span6">
               <h2 class="text-left">{{state.playerOne.name}}</h2>
               <div class="progress progress-info">
-                <div class="bar" ng-style="'width: ' + state.playerOne.score+'%'"></div>
+                <div class="bar" ng-style="playerOneProgress()"></div>
               </div>
 
           </div>
           <div class="span6">
               <h2 class="text-right">{{state.playerTwo.name}}</h2>
               <div class="progress progress-info">
-                <div class="bar" ng-style="'width: ' + state.playerOne.score+'%'"></div>
+                <div class="bar" ng-style="playerTwoProgress()"></div>
               </div>
           </div>
         </div>
@@ -46,7 +46,7 @@
                     </ol>
                 </div>
                 <div class="row" ng-show="isActive()">
-                    <h3 >Make your choice:</h3>
+                    <h3 >Make your choice:<img ng-show="isWaiting()" src="@routes.Assets.at("images/spinner.gif")" /></h3>
 
                     <span ng-repeat="tag in state.availableTags">
                         <a href="#" class="btn btn-primary" ng-click="chooseTag(tag.id)">{{tag.name}}</a>
@@ -55,7 +55,7 @@
 
                 </div>
                 <div class="row" ng-hide="isActive()">
-                    <h3>Opponent's move:</h3>
+                    <h3>Opponent's move:<img src="@routes.Assets.at("images/spinner.gif")" /></h3>
                     <span ng-repeat="tag in state.availableTags">
                         <a href="#" class="btn">{{tag.name}}</a>
                     </span>
