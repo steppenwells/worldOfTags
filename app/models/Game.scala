@@ -3,6 +3,7 @@ package models
 import akka.actor.{Props, Actor}
 import scala.concurrent.ExecutionContext
 import ExecutionContext.Implicits.global
+import scala.util.Random
 
 class GameActor(one: ConnectedPlayer, two: ConnectedPlayer) extends Actor {
 
@@ -20,10 +21,14 @@ class GameActor(one: ConnectedPlayer, two: ConnectedPlayer) extends Actor {
       playerTwo = two.player,
       active = one.player.name,
       pickedTags = List(startTag),
-      availableTags = availableTags.tags.filterNot(_ == startTag))
+      availableTags = randomTen(availableTags.tags.filterNot(_ == startTag)))
 
     one.connection ! JoinedGame(state, self)
     two.connection ! JoinedGame(state, self)
+  }
+
+  def randomTen(ts: List[Tag]) = {
+    Random.shuffle(ts).take(10)
   }
 
   def receive = {
@@ -81,7 +86,7 @@ class GameActor(one: ConnectedPlayer, two: ConnectedPlayer) extends Actor {
                 playerTwo = p2,
                 active = inactivePlayer,
                 pickedTags = List(startTag),
-                availableTags = availableTags.tags.filterNot(_ == startTag))
+                availableTags = randomTen(availableTags.tags.filterNot(_ == startTag)))
 
               one.connection ! SyncState(state)
               two.connection ! SyncState(state)
@@ -127,7 +132,7 @@ class GameActor(one: ConnectedPlayer, two: ConnectedPlayer) extends Actor {
                 playerTwo = p2,
                 active = inactivePlayer,
                 pickedTags = List(startTag),
-                availableTags = availableTags.tags.filterNot(_ == startTag))
+                availableTags = randomTen(availableTags.tags.filterNot(_ == startTag)))
 
               one.connection ! SyncState(state)
               two.connection ! SyncState(state)
@@ -144,7 +149,7 @@ class GameActor(one: ConnectedPlayer, two: ConnectedPlayer) extends Actor {
             state = state.copy(
               active = inactivePlayer,
               pickedTags = state.pickedTags ::: t :: Nil,
-              availableTags = ats)
+              availableTags = randomTen(ats))
 
             one.connection ! SyncState(state)
             two.connection ! SyncState(state)
