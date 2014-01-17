@@ -4,6 +4,7 @@ GET   /echo          controllers.AppMain.echo
 GET   /echoSocket          controllers.AppMain.echoSocket
 GET   /gameConnection          controllers.AppMain.gameConnection
 
+POST   /content                 controllers.AppMain.content
 POST  /game      controllers.AppMain.game()
 
 # Map static resources from the /public folder to the /assets URL path

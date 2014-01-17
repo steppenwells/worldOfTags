@@ -12,6 +12,8 @@ object ContentApi {
   def tagFetchUrl = s"http://content.guardianapis.com/search.json?page-size=1&show-tags=keyword&show-refinements=keyword&refinement-size=50"
   def tagByIdUrl(tagId: String) = s"http://content.guardianapis.com/${tagId}.json?pageSize=1"
 
+  def contentUrl(tagIds: String) = s"http://content.guardianapis.com/search.json?tag=$tagIds&showFields=headline,trailText,thumbnail"
+
   def getFollowupTags(currentTags: List[String]) = {
     WS.url(refinementFetchUrl(currentTags.mkString(","))).get().map { response =>
 
@@ -76,6 +78,26 @@ object ContentApi {
       t
     }
   }
+
+  def getContent(tagIds: String) = {
+    WS.url(contentUrl(tagIds)).get().map { response =>
+      val contentJson = (response.json \ "response" \ "results")
+      //println(contentJson)
+      contentJson match {
+        case arr: JsArray => {
+          arr.value.map { c =>
+            Content(
+              url = (c \ "webUrl").as[String],
+              headline = (c \ "fields" \ "headline").as[String],
+              trail = (c \ "fields" \ "trailText").as[String],
+              thumb = (c \ "fields" \ "thumbnail").asOpt[String]
+            )
+          }.toList
+        }
+        case _ => Nil
+      }
+    }
+  }
 }
 
 case class FollowupData(count: Int, tags: List[Tag])
@@ -83,3 +105,5 @@ case class FollowupData(count: Int, tags: List[Tag])
 case class Tag(id: String, name: String) {
   def toJson = s"""{"id" : "$id", "name": "$name"}"""
 }
+
+case class Content(url: String, headline: String, trail: String, thumb: Option[String])

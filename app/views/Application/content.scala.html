@@ -1,0 +1,26 @@
+@(cs: List[models.Content], ts: Array[String])
+
+@main(title = "WOT - welcome") {
+
+
+    <div class="container">
+        <div class="row">
+        <h3>Content with tags</h3>
+        @for(t <- ts){
+            <span class="label label-success">@t </span>
+        }
+        </div>
+        @for(c <- cs) {
+        <div class="row">
+            <h3><a href="@c.url">@c.headline</a></h3>
+            <span>
+                @for(t <- c.thumb) {
+                <img src="@t" />
+            }
+            </span>
+            <span>@c.trail</span>
+        </div>
+        }
+    </div>
+
+}

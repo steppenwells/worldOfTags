@@ -46,6 +46,13 @@ object AppMain extends Controller {
     Ok(views.html.Application.game(name.get))
   }
 
+  def content() = Action.async { req =>
+    val tags = req.body.asFormUrlEncoded.flatMap(_.get("tags")).flatMap(_.headOption)
+    println(tags.get)
+    val content = ContentApi.getContent(tags.get)
+    content.map(c => Ok(views.html.Application.content(c, tags.get.split(","))))
+  }
+
   def gameConnection() = WebSocket.using[String] { request =>
 
     //Concurernt.broadcast returns (Enumerator, Concurrent.Channel)

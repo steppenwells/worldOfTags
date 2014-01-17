@@ -35,6 +35,10 @@
                             {{tag.name}}
                          </li>
                      </ul>
+                    <form method="POST" target="contentWindow" action="/content">
+                        <input type="hidden" name="tags" ng-value="trickTagIds(trick)" />
+                        <input type="submit" value="view"/>
+                    </form>
                 </div>
             </div>
 
@@ -76,6 +80,10 @@
                             {{tag.name}}
                          </li>
                      </ul>
+                    <form method="POST" target="contentWindow" action="/content">
+                        <input type="hidden" name="tags" ng-value="trickTagIds(trick)" />
+                        <input type="submit" value="view"/>
+                    </form>
                 </div>
             </div>
         </div>
